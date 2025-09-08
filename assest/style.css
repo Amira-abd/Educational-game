@@ -233,3 +233,16 @@ body {
     transform: translateX(-100%); /* يخرج لليسار */
   }
 }
+
+  .timer {
+    background-color: white;
+    color: rgb(220, 11, 11);
+    padding: 15px 25px;      /* مساحة داخلية مناسبة */
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: inline-block;    /* مهم عشان حجم الـ div يتحدد بمحتواه */
+    min-width: auto;          /* يضمن أن العرض يتحدد بالمحتوى فقط */
+  }

@@ -15,49 +15,47 @@ const level3QuestionsPool = [
 // ✅ تعريف الأصوات
 const correctSound = new Audio("sounds/correct.wav");
 const wrongSound = new Audio("sounds/wrong.wav");
+const timerSound = new Audio("sounds/tick.wav"); // صوت التيك كل ثانية
 
 // ✅ دالة توليد الأسئلة
-function generateLevelQuestions(levelNum){
+function generateLevelQuestions(levelNum) {
   let questions = [];
-  if(levelNum === 1){
-    // المستوى الأول: جدول 1-5 (5 أسئلة عشوائية)
-    for(let i=0; i<5; i++){
-      let a = Math.floor(Math.random()*5)+1;
-      let b = Math.floor(Math.random()*5)+1;
+  if (levelNum === 1) {
+    for (let i = 0; i < 5; i++) {
+      let a = Math.floor(Math.random() * 5) + 1;
+      let b = Math.floor(Math.random() * 5) + 1;
       let correct = a * b;
       let options = [correct];
-      while(options.length<3){
-        let fake = Math.floor(Math.random()*25)+1;
-        if(!options.includes(fake)) options.push(fake);
+      while (options.length < 3) {
+        let fake = Math.floor(Math.random() * 25) + 1;
+        if (!options.includes(fake)) options.push(fake);
       }
       options = shuffle(options);
-      questions.push({q:`ما ناتج ${a} × ${b}؟`, options, answer:options.indexOf(correct)});
+      questions.push({ q: `ما ناتج ${a} × ${b}؟`, options, answer: options.indexOf(correct) });
     }
-  } else if(levelNum === 2){
-    // المستوى الثاني: ضرب عددين (1-12) (5 أسئلة عشوائية)
-    for(let i=0; i<5; i++){
-      let a = Math.floor(Math.random()*12)+1;
-      let b = Math.floor(Math.random()*12)+1;
+  } else if (levelNum === 2) {
+    for (let i = 0; i < 5; i++) {
+      let a = Math.floor(Math.random() * 12) + 1;
+      let b = Math.floor(Math.random() * 12) + 1;
       let correct = a * b;
       let options = [correct];
-      while(options.length<3){
-        let fake = Math.floor(Math.random()*144)+1;
-        if(!options.includes(fake)) options.push(fake);
+      while (options.length < 3) {
+        let fake = Math.floor(Math.random() * 144) + 1;
+        if (!options.includes(fake)) options.push(fake);
       }
       options = shuffle(options);
-      questions.push({q:`ما ناتج ${a} × ${b}؟`, options, answer:options.indexOf(correct)});
+      questions.push({ q: `ما ناتج ${a} × ${b}؟`, options, answer: options.indexOf(correct) });
     }
-  } else if(levelNum === 3){
-    // المستوى الثالث: اختيار 5 عشوائي من 10 أسئلة ثابتة
+  } else if (levelNum === 3) {
     let shuffled = shuffle([...level3QuestionsPool]);
-    questions = shuffled.slice(0,5);
+    questions = shuffled.slice(0, 5);
   }
-  return {questions};
+  return { questions };
 }
 
 // ✅ دالة خلط
-function shuffle(array){
-  return array.sort(()=> Math.random()-0.5);
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
 }
 
 // ✅ الحالة العامة
@@ -66,10 +64,10 @@ let state = {
   qIndex: 0,
   levelCorrectCount: 0,
   totalScore: 0,
-  totalQuestions: 15, // 5 لكل مستوى
-  levelResults: {1:0,2:0,3:0},
-  attempts: 0, // المحاولات الكلية
-  levelAttempts: {1:0,2:0,3:0} // محاولات كل مستوى
+  totalQuestions: 15,
+  levelResults: { 1: 0, 2: 0, 3: 0 },
+  attempts: 0,
+  levelAttempts: { 1: 0, 2: 0, 3: 0 }
 };
 
 // ✅ عناصر DOM
@@ -90,46 +88,91 @@ const el = {
   menuBtn: document.getElementById('menu-btn'),
   scoreText: document.getElementById('score-text'),
   starsDiv: document.getElementById('stars'),
-  finalMessage: document.getElementById('final-message')
+  finalMessage: document.getElementById('final-message'),
+  timerDiv: document.getElementById('timer')
 };
 
+// ✅ التايمر
+let timer;
+let timeLeft = 60;
+
+function startTimer() {
+  clearInterval(timer);
+  timeLeft = 60;
+  el.timerDiv.textContent = `الوقت: ${timeLeft} ثانية`;
+
+  timer = setInterval(() => {
+    timeLeft--;
+
+    // صوت التيك
+    timerSound.currentTime = 0;
+    timerSound.play();
+
+    el.timerDiv.textContent = `الوقت: ${timeLeft} ثانية`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      stopTick();
+      handleTimeOut();
+    }
+  }, 1000);
+}
+
+// ✅ وقف صوت tick
+function stopTick() {
+  timerSound.pause();
+  timerSound.currentTime = 0;
+}
+
+function handleTimeOut() {
+  const answers = document.querySelectorAll('.btn-answer');
+  answers.forEach(b => b.disabled = true);
+
+  stopTick(); // وقف صوت التيك
+
+  wrongSound.currentTime = 0;
+  wrongSound.play();
+
+  alert("⏰ انتهى الوقت! الإجابة تعتبر خطأ");
+
+  setTimeout(() => {
+    el.nextBtn.click();
+  }, 2000);
+}
+
 // ✅ init handlers
-el.level1Btn.addEventListener('click', ()=> startLevel(1));
-el.level2Btn.addEventListener('click', ()=> {
-  if(el.level2Btn.dataset.locked === 'true'){ alert('المستوى مقفول - أكمل المستوى السابق أولاً'); return; }
+el.level1Btn.addEventListener('click', () => startLevel(1));
+el.level2Btn.addEventListener('click', () => {
+  if (el.level2Btn.dataset.locked === 'true') { alert('المستوى مقفول - أكمل المستوى السابق أولاً'); return; }
   startLevel(2);
 });
-el.level3Btn.addEventListener('click', ()=> {
-  if(el.level3Btn.dataset.locked === 'true'){ alert('المستوى مقفول - أكمل المستوى السابق أولاً'); return; }
+el.level3Btn.addEventListener('click', () => {
+  if (el.level3Btn.dataset.locked === 'true') { alert('المستوى مقفول - أكمل المستوى السابق أولاً'); return; }
   startLevel(3);
 });
 el.backBtn.addEventListener('click', showMenu);
-el.retryBtn.addEventListener('click', ()=> location.reload());
-el.menuBtn.addEventListener('click', ()=> { resetToMenu(); });
+el.retryBtn.addEventListener('click', () => location.reload());
+el.menuBtn.addEventListener('click', () => { resetToMenu(); });
 
-function resetToMenu(){
+function resetToMenu() {
   state.currentLevel = null; state.qIndex = 0; state.levelCorrectCount = 0;
   showMenu();
 }
 
 // ✅ عرض القائمة
-function showMenu(){ 
-  el.menu.classList.remove('hidden'); 
-  el.game.classList.add('hidden'); 
-  el.end.classList.add('hidden'); 
+function showMenu() {
+  el.menu.classList.remove('hidden');
+  el.game.classList.add('hidden');
+  el.end.classList.add('hidden');
 }
 
 // ✅ بدء مستوى
-function startLevel(levelNum){
+function startLevel(levelNum) {
   state.currentLevel = levelNum;
   state.qIndex = 0;
   state.levelCorrectCount = 0;
-
-  // زيادة المحاولات
   state.attempts++;
   state.levelAttempts[levelNum]++;
-
-  // توليد أسئلة جديدة
   state.currentQuestions = generateLevelQuestions(levelNum).questions;
 
   el.menu.classList.add('hidden');
@@ -138,7 +181,7 @@ function startLevel(levelNum){
 }
 
 // ✅ عرض السؤال
-function renderQuestion(){
+function renderQuestion() {
   const lvlNum = state.currentLevel;
   const lvl = state.currentQuestions;
   el.levelTitle.textContent = `المستوى ${lvlNum}`;
@@ -148,55 +191,57 @@ function renderQuestion(){
   el.nextBtn.classList.add('hidden');
 
   const q = lvl[state.qIndex];
-  const box = document.createElement('div'); box.className='question';
+  const box = document.createElement('div'); box.className = 'question';
   box.innerHTML = `<div class="q-text">${q.q}</div>`;
-  const answers = document.createElement('div'); answers.className='answers';
-  q.options.forEach((opt,i)=>{
-    const b = document.createElement('button'); b.className='btn-answer'; b.textContent = opt;
-    b.addEventListener('click', ()=>{
-      if(b.classList.contains('disabled')) return;
-      if(i === q.answer){ 
-        b.classList.add('correct'); 
-        state.levelCorrectCount++; 
-        state.totalScore++; 
-        correctSound.currentTime = 0; // يبدأ من الأول
-        correctSound.play(); // ✅ صوت الصحيح
+  const answers = document.createElement('div'); answers.className = 'answers';
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button'); b.className = 'btn-answer'; b.textContent = opt;
+    b.addEventListener('click', () => {
+      clearInterval(timer); // ⏹️ وقف التايمر عند الإجابة
+      stopTick(); // ⏹️ وقف صوت التيك
+      if (b.classList.contains('disabled')) return;
+      if (i === q.answer) {
+        b.classList.add('correct');
+        state.levelCorrectCount++;
+        state.totalScore++;
+        correctSound.currentTime = 0;
+        correctSound.play();
       }
-      else{ 
-        b.classList.add('wrong'); 
-        wrongSound.currentTime = 0; // يبدأ من الأول
-        wrongSound.play(); // ❌ صوت الخطأ
+      else {
+        b.classList.add('wrong');
+        wrongSound.currentTime = 0;
+        wrongSound.play();
       }
-      [...answers.querySelectorAll('button')].forEach(x=>x.disabled=true);
+      [...answers.querySelectorAll('button')].forEach(x => x.disabled = true);
       el.nextBtn.classList.remove('hidden');
     });
     answers.appendChild(b);
   });
   box.appendChild(answers);
   el.questionArea.appendChild(box);
+
+  // ⏳ تشغيل التايمر لكل سؤال
+  startTimer();
 }
 
 // ✅ زر التالي
-el.nextBtn.addEventListener('click', ()=>{
+el.nextBtn.addEventListener('click', () => {
   const lvlNum = state.currentLevel;
   const lvl = state.currentQuestions;
   state.qIndex++;
-  if(state.qIndex >= lvl.length){
+  if (state.qIndex >= lvl.length) {
     const needed = lvl.length;
-    if(state.levelCorrectCount === needed){
+    if (state.levelCorrectCount === needed) {
       state.levelResults[lvlNum] = needed;
       unlockNextAndReturn(lvlNum);
     } else {
-      alert('فيه إجابات خطأ ❌. لازم تجاوب كل الأسئلة صح عشان تفتح المستوى التالي. هنعيد المستوى الآن.');
+      alert('هناك بعض الإجابات غير صحيحة ❌. يجب الإجابة على جميع الأسئلة بشكل صحيح لفتح المستوى التالي. سنعيد المحاولة الآن.');
       recalcTotalScoreAfterFailure(lvlNum);
       state.qIndex = 0;
       state.levelCorrectCount = 0;
-
-      // 👇 زيادة المحاولات عند الإعادة
       state.attempts++;
       state.levelAttempts[lvlNum]++;
-
-      state.currentQuestions = generateLevelQuestions(lvlNum).questions; // أسئلة جديدة عند الإعادة
+      state.currentQuestions = generateLevelQuestions(lvlNum).questions;
       renderQuestion();
     }
   } else {
@@ -204,31 +249,31 @@ el.nextBtn.addEventListener('click', ()=>{
   }
 });
 
-function unlockNextAndReturn(lvlNum){
-  if(lvlNum === 1){
+function unlockNextAndReturn(lvlNum) {
+  if (lvlNum === 1) {
     document.getElementById('level2-btn').classList.remove('locked');
     document.getElementById('level2-btn').dataset.locked = 'false';
   }
-  if(lvlNum === 2){
+  if (lvlNum === 2) {
     document.getElementById('level3-btn').classList.remove('locked');
     document.getElementById('level3-btn').dataset.locked = 'false';
   }
   alert('ممتاز! نجحت في كل أسئلة المستوى ' + lvlNum + ' وتم فتح المستوى التالي.');
-  if(lvlNum === 3){
+  if (lvlNum === 3) {
     showResults();
   } else {
     showMenu();
   }
 }
 
-function recalcTotalScoreAfterFailure(failedLevel){
+function recalcTotalScoreAfterFailure(failedLevel) {
   let sum = 0;
-  for(const k in state.levelResults) sum += state.levelResults[k] || 0;
+  for (const k in state.levelResults) sum += state.levelResults[k] || 0;
   state.totalScore = sum;
 }
 
 // ✅ إظهار النتائج النهائية
-function showResults(){
+function showResults() {
   el.menu.classList.add('hidden');
   el.game.classList.add('hidden');
   el.end.classList.remove('hidden');
@@ -238,15 +283,13 @@ function showResults(){
   const percent = Math.round((score / total) * 100);
   el.scoreText.textContent = `درجتك: ${score} من ${total} — النسبة: ${percent}%`;
 
-  // ✅ إضافة الصورة بجانب النتيجة
   const img = document.createElement('img');
-  img.src = "images/student.png"; 
+  img.src = "images/student.png";
   img.alt = "طالب فائز";
   img.style.width = "200px";
   img.style.height = "300px";
   img.style.margin = "15px";
 
-  // عنصر لتجميع الصورة + النص
   const resultBox = document.createElement('div');
   resultBox.style.display = "flex";
   resultBox.style.alignItems = "center";
@@ -263,7 +306,6 @@ function showResults(){
   el.end.innerHTML = "";
   el.end.appendChild(resultBox);
 
-  // عرض عدد المحاولات
   const attemptsInfo = document.createElement('p');
   attemptsInfo.textContent = `عدد المحاولات الكلية: ${state.attempts}`;
   el.end.appendChild(attemptsInfo);
