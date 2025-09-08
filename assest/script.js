@@ -1,6 +1,4 @@
-// لعبة رياضيات للأطفال - 3 مستويات - بالعربي
-
-// ✅ أسئلة المستوى الثالث (10 أسئلة ثابتة تختاري منهم 5 عشوائي كل محاولة)
+// ✅ تعريف أسئلة المستوى الثالث (10 أسئلة ثابتة تختاري منهم 5 عشوائي كل محاولة)
 const level3QuestionsPool = [
   { q: "مسابقة لشد الحبل تشارك فيها 7 مدارس عدد الطلاب المشاركين من كل مدرسة هو 20 طالب، فإن عدد الطلاب المشاركين في المسابقة ؟", options: [140, 210, 280], answer: 0 },
   { q: "يمتلك محمد 5 مجموعات من الطوابع كل مجموعة تحتوى على 20 طابع، فإن عدد الطوابع لدى محمد ؟", options: [50, 100, 150], answer: 1 },
@@ -12,8 +10,11 @@ const level3QuestionsPool = [
   { q: "عدد الأقلام في العلبة الواحدة 8 أقلام، فإن عدد الأقلام في 9 علب = .......", options: [64, 72, 80], answer: 1 },
   { q: "اشترت فاطمة 3 كتب للقراءة قيمة الكتاب الواحد 7 ريال عماني، فإن قيمة الكتب الثلاثة = ....", options: [14, 28, 21], answer: 2 },
   { q: "عبوة تحتوى على 7 كجم من السكر، فإن مقدار السكر الموجود في 6 عبوات =.......", options: [42, 36, 38], answer: 0 }
-
 ];
+
+// ✅ تعريف الأصوات
+const correctSound = new Audio("sounds/correct.WAV");
+const wrongSound = new Audio("sounds/wrong.WAV");
 
 // ✅ دالة توليد الأسئلة
 function generateLevelQuestions(levelNum){
@@ -158,8 +159,14 @@ function renderQuestion(){
         b.classList.add('correct'); 
         state.levelCorrectCount++; 
         state.totalScore++; 
+        correctSound.currentTime = 0; // يبدأ من الأول
+        correctSound.play(); // ✅ صوت الصحيح
       }
-      else{ b.classList.add('wrong'); }
+      else{ 
+        b.classList.add('wrong'); 
+        wrongSound.currentTime = 0; // يبدأ من الأول
+        wrongSound.play(); // ❌ صوت الخطأ
+      }
       [...answers.querySelectorAll('button')].forEach(x=>x.disabled=true);
       el.nextBtn.classList.remove('hidden');
     });
