@@ -13,8 +13,8 @@ const level3QuestionsPool = [
 ];
 
 // ✅ تعريف الأصوات
-const correctSound = new Audio("sounds/correct.WAV");
-const wrongSound = new Audio("sounds/wrong.WAV");
+const correctSound = new Audio("sounds/correct.wav");
+const wrongSound = new Audio("sounds/wrong.wav");
 
 // ✅ دالة توليد الأسئلة
 function generateLevelQuestions(levelNum){
