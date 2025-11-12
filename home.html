@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Basil George">
+    <title>من سيربح المليون </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <main class="container" dir="rtl">
+        <!-- Start Page -->
+        <section class="start-box custom">
+            <div class="game-logo">
+                <img src="img/logo.png" alt="logo">
+            </div>
+            <div class="instruction">
+                <h3>التعليمات</h3>
+                <ul class="instruction-list">
+                    <li>لديك 30 ثانية لكل سؤال</li>
+                    <li>المبالغ المضمون هي السؤال رقم 5 ، 10 ، 15</li>
+                    <li>تنتهي المسابقة:
+                        <ul>
+                            <li>إنتهاء الوقت</li>
+                            <li>الإجابة خاطئة</li>
+                            <li>الإجابة علي جميع الأسئلة</li>
+                        </ul>
+                    </li>
+                    <li>وسائل المساعدة
+                        <ul>
+                            <li>سؤال الجمهور</li>
+                            <li>الاتصال بصديق</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="user-info">
+                <div class="start-game-btn btn">ابدأ المسابقة</div>
+            </div>
+        </section>
+        <!-- Main Game Page -->
+        <section class="game-box custom">
+            <div class="game">
+                <div class="timer">15</div>
+                <div class="current-question-amount"></div>
+                <div class="life-line-display-box">
+                    <div class="call">
+                        <img src="img/call.png" alt="call">
+                        <div class="call-answer"></div>
+                    </div>
+                    <div class="au-cover">
+                        <h4 class="alpha">أ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ب&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ج&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;د</h4>
+                        <div class="au-container">
+                            <div class="au-box" id="0"><span></span><div class="bx"></div></div>
+                            <div class="au-box" id="1"><span></span><div class="bx"></div></div>
+                            <div class="au-box" id="2"><span></span><div class="bx"></div></div>
+                            <div class="au-box" id="3"><span></span><div class="bx"></div></div>
+                        </div>
+                    </div>
+                    <div class="amount-won"></div>
+                </div>
+                <div class="question-box">
+                    <div class="question">
+                        <div class="question-number"></div>
+                        <div class="question-text"></div>
+                    </div>
+                    <div class="option-box">
+                        <div class="option" id="0" onclick="check(this)"><span class="span-o">أ: </span><span class="opt"></span></div>
+                        <div class="option" id="1" onclick="check(this)"><span class="span-o">ب: </span><span class="opt"></span></div>
+                        <div class="option" id="2" onclick="check(this)"><span class="span-o">جـ: </span><span class="opt"></span></div>
+                        <div class="option" id="3" onclick="check(this)"><span class="span-o">د: </span><span class="opt"></span></div>
+                    </div>
+                    <div class="next-question">
+                        <button type="button" class="next-question-btn btn"> السؤال التالي</button>
+                        <button type="button" class="playAgain-btn btn">أعد المحاولة</button>
+                    </div>
+                </div>
+            </div>
+            <div class="side">
+                <div class="life-lines">
+                    <div class="fify50"><span class="cancel"></span></div>
+                    <div class="callAFriend"><span class="cancel"></span></div>
+                    <div class="askTheAudience"><span class="cancel"></span></div>
+                </div>
+                <div class="price-box">
+                    <ol class="prices" reversed>
+                        <li><span>&#9671;</span> مليون ريال</li>
+                        <li><span>&#9671;</span>750,000 ريال</li>
+                        <li><span>&#9671;</span>500,000 ريال</li>
+                        <li><span>&#9671;</span>250,000 ريال</li>
+                        <li><span>&#9671;</span>100,000 ريال</li>
+                        <li><span>&#9671;</span>50,000 ريال</li>
+                        <li><span>&#9671;</span>30,000 ريال</li>
+                        <li><span>&#9671;</span>20,000 ريال</li>
+                        <li><span>&#9671;</span>10,000 ريال</li>
+                        <li><span>&#9671;</span>7,000 ريال</li>
+                        <li><span>&#9671;</span>5,000 ريال</li>
+                        <li><span>&#9671;</span>3,000 ريال</li>
+                        <li><span>&#9671;</span>2,000 ريال</li>
+                        <li><span>&#9671;</span>1,000 ريال</li>
+                        <li><span>&#9671;</span>500 ريال</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -234,15 +234,95 @@ body {
   }
 }
 
-  .timer {
-    background-color: white;
-    color: rgb(220, 11, 11);
-    padding: 15px 25px;      /* مساحة داخلية مناسبة */
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    display: inline-block;    /* مهم عشان حجم الـ div يتحدد بمحتواه */
-    min-width: auto;          /* يضمن أن العرض يتحدد بالمحتوى فقط */
+
+/* ========================== */
+/* 🔹 تحسينات التجاوب (Responsive) 🔹 */
+/* ========================== */
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 24px;
   }
+
+  .btn-answer {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .level-btn {
+    min-width: 45%;
+  }
+
+  .top-img {
+    width: 90px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .wrap {
+    width: 100%;
+  }
+
+  .hero img {
+    width: 250px !important;
+    height: auto !important;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .level-btn {
+    min-width: 100%;
+    font-size: 15px;
+  }
+
+  .btn-answer {
+    font-size: 16px;
+  }
+
+  .top-img {
+    width: 70px;
+  }
+
+  .footer {
+    font-size: 13px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .hero img {
+    width: 200px !important;
+  }
+
+  .btn-answer {
+    font-size: 15px;
+    padding: 8px;
+  }
+
+  .level-btn {
+    font-size: 14px;
+  }
+
+  .top-img {
+    width: 60px;
+  }
+
+  .footer {
+    font-size: 12px;
+  }
+}
+
